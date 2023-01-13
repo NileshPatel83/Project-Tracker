@@ -1,0 +1,27 @@
+:root{
+    --header-backgroundcolor: rgb(44, 62, 80);
+    --table-header--backgroundcolor: rgb(231, 76, 60);
+    --table-row--backgroundcolor: rgb(255, 245, 209);
+    --font-color-white: white;
+}
+
+.font-color{
+    color: var(--font-color-white);
+}
+
+.cust-background-color{
+    background-color: var(--header-backgroundcolor);
+}
+
+.cust-header-row{
+    background-color: var(--table-header--backgroundcolor);
+}
+
+.cust-row{
+    background-color: var(--table-row--backgroundcolor);
+}
+
+.cust-button-border{
+    border: none;
+}
+
