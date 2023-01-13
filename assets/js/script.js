@@ -16,10 +16,10 @@ let timeInterval = setInterval(function () {
 //Event handler when new project form is submitted.
 addProjectFormEl.on('submit', processProjectData);
 
-projDisplayEl.on('click', '.btn-delete-project', deleteProject());
+projDisplayEl.on('click', '.btn-delete-project', deleteProject);
 
 function deleteProject(event){
-
+    event.preventDefault();
 }
 
 //Processes project data entered in modal form.
@@ -48,9 +48,9 @@ function displayAllProjectData(){
     let projectStorage = getAllProjectStorage();
 
     //Displays all project data in table.
-    projectStorage.forEach(project => {
-        displayProjectData(project);
-    });
+    for (let i = 0; i < projectStorage.length; i++) {
+        displayProjectData(projectStorage[i], i);
+    }
 }
 
 function getAllProjectStorage(){
@@ -67,7 +67,10 @@ function getAllProjectStorage(){
 }
 
 //Displays project data in table.
-function displayProjectData(projectData){
+function displayProjectData(projectData, index){
+
+    // get date/time for start of today
+    let today = dayjs().startOf('day');
 
     let projectDate = dayjs(projectData.dueDate);
 
@@ -82,11 +85,7 @@ function displayProjectData(projectData){
     let dueDateEl = $('<td>');
     dueDateEl.text (projectDate.format('DD/MM/YYYY'));
 
-    let deleteEl = $('<td>');
-    let deleteBtnEl = $('<button>');
-    deleteBtnEl.text('X');
-    deleteBtnEl.addClass('btn btn-sm btn-delete-project');
-    deleteEl.append(deleteBtnEl);
+    let deleteEl = $('<td><button class="btn btn-sm btn-delete-project" data-index="' + index + '">X</button></td>');
     
     if(projectDate.isBefore(today)){
         tableRowEl.addClass('project-late');
