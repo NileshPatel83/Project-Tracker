@@ -25,12 +25,37 @@ function processProjectData (event){
     let projectData = getNewProectData();
     if(projectData === null) return;
 
-    //Displays project data in table.
-    displayProjectData(projectData);
-
     //Get project data counter for local storage.
+    let storageCounter = getStorageCounter();
 
     //Store project data to local storage.
+
+        // //Displays project data in table.
+    // displayProjectData(projectData);
+}
+
+//Gets the storage counter for current project.
+//This is done by getting all keys for the projects, finding the last counter and incrementing it.
+function getStorageCounter(){
+
+    let counter = 0;
+
+    //Gets all keys from local storage.
+    let keys = Object.keys(localStorage);
+
+    //Loops through all keys and gets the key pair.
+    for (let i = 0; i < keys.length; i++){
+
+        //Only processes key if it includes the word 'quizscore-'.
+        //Compares the localstorage counter and stores the max value.
+        if(keys[i].includes(keyText)){
+            let number = parseInt(keys[i].replace(keyText, '', 10));
+
+            if(number > counter) counter = number;
+        }
+    }
+
+    return counter + 1;
 }
 
 //Gets the project data from modal form.
