@@ -28,10 +28,21 @@ function processProjectData (event){
     //Get project data counter for local storage.
     let storageCounter = getStorageCounter();
 
-    //Store project data to local storage.
+    //Stores current project data to local storage.
+    storeCurrentProjectToLocalStorage(storageCounter, projectData);
 
         // //Displays project data in table.
     // displayProjectData(projectData);
+}
+
+//Stores current project data to local storage.
+function storeCurrentProjectToLocalStorage(storageCounter, projectData){
+
+    //Creates key.
+    let key = scoreKey + storageCounter;
+
+    //Stores current project to local storage.
+    localStorage.setItem(key, JSON.stringify(projectData));
 }
 
 //Gets the storage counter for current project.
