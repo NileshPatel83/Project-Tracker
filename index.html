@@ -41,20 +41,21 @@
         </div>
 
         <div id="container" class="container col-12 col-md-8 col-lg-9">
-          <div class="row cust-header-row font-color p-2 fw-bold">
-            <div class="col">
-              Name
-            </div>
-            <div class="col">
-              Type
-            </div>
-            <div class="col">
-              Due
-            </div>
-            <div class="col">
-              
-            </div>
-          </div>
+          
+          <!-- Project content table -->
+          <table class="table">
+            <thead>
+              <tr class="cust-header-row font-color">
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Due</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            
+            <!-- Content dispaly -->
+            <tbody></tbody>
+          </table>
         </div>
       </div>
     </main>
@@ -63,15 +64,18 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header cust-background-color font-color">
             <h5 class="modal-title" id="exampleModalLabel">Add a new project</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
+            <!-- Project Name -->
             <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">Project Name</label>
               <input class="form-control" type="text" placeholder="Enter the project's name" aria-label="default input example">
             </div>
+
+            <!-- Project type selection -->
             <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">Project Type</label>
               <select class="form-select"">
@@ -84,9 +88,17 @@
               </select>
             </div>
           </div>
+
+          <!-- Due date -->
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Project Name</label>
+            
+          </div>
+
+          <!-- Buttons -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary">Add Project</button>
+            <button type="button" class="btn cust-background-color font-color cust-button-border" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn cust-background-color font-color cust-button-border">Add Project</button>
           </div>
         </div>
       </div>
