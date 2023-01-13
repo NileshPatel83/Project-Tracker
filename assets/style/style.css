@@ -4,6 +4,8 @@
     --table-row--backgroundcolor: rgb(255, 245, 209);
     --font-color-white: white;
     --hover-font-color: rgb(58, 148, 216);
+    --lightred: #f9eae7;
+    --lightyellow: #fff5d1;
 }
 
 .font-color{
@@ -30,3 +32,10 @@
     color: var(--hover-font-color);
 }
 
+.project-late {
+    background-color: var(--lightred);
+  }
+  
+.project-today {
+    background-color: var(--lightyellow);
+}

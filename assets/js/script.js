@@ -6,52 +6,76 @@ let projNameEl = $('#project-name');
 let projTypeEl = $('#project-type');
 let projDisplayEl = $('#project-display');
 
-function getNewProectData(){
-
-    let projName = projNameEl.val();
-    let projType = projTypeEl.val();
-    let dueDate = dateInputEl.val();
-
-    if (!projName || !projType || !dueDate) return null;
-
-    let projectData = {
-        projectName : projName,
-        projectType : projType,
-        dueDate : dueDate
-    };
-
-    return projectData;
-}
-
-function processProjectData (event){
-
-    event.preventDefault();
-    
-    //Gets the project data.
-    let projectData = getNewProectData();
-    if(projectData == null) return;
-
-    //Displays project data in table.
-    displayProjectData();
-
-    //Get project data counter for local storage.
-
-    //Store project data to local storage.
-}
-
-addProjectFormEl.on('submit', processProjectData);
-
-// // Datepicker widget
-// $(function () {
-//     dateInputEl.datepicker({
-//       changeMonth: true,
-//       changeYear: true,
-//     });
-//   });
-
 var today = dayjs();
 $('#current-day').text(today.format('MMM D, YYYY'));
 
 let timeInterval = setInterval(function () {
     $('#current-time').text(dayjs().format('h:mm:ss A'));
 }, 1000);  
+
+//Event handler when new project form is submitted.
+addProjectFormEl.on('submit', processProjectData);
+
+//Processes project data entered in modal form.
+function processProjectData (event){
+
+    event.preventDefault();
+    
+    //Gets the project data.
+    let projectData = getNewProectData();
+    if(projectData === null) return;
+
+    //Displays project data in table.
+    displayProjectData(projectData);
+
+    //Get project data counter for local storage.
+
+    //Store project data to local storage.
+}
+
+//Gets the project data from modal form.
+function getNewProectData(){
+
+    //Returns null if any of project name, type or due date are not set.
+    if (!projNameEl.val() || !projTypeEl.val() || !dateInputEl.val()) return null;
+
+    let projectData = {
+        projectName : projNameEl.val(),
+        projectType : projTypeEl.val(),
+        dueDate : dateInputEl.val()
+    };
+
+    return projectData;
+}
+
+//Displays project data in table.
+function displayProjectData(projectData){
+
+    let projectDate = dayjs(projectData.dueDate);
+
+    let tableRowEl = $('<tr>');
+
+    let projectNameEl = $('<td>');
+    projectNameEl.text (projectData.projectName);
+
+    let projectTypeEl = $('<td>');
+    projectTypeEl.text (projectData.projectType);
+
+    let dueDateEl = $('<td>');
+    dueDateEl.text (projectDate.format('DD/MM/YYYY'));
+
+    let deleteEl = $('<td>');
+    let deleteBtnEl = $('<button>');
+    deleteBtnEl.text('X');
+    deleteBtnEl.addClass('btn btn-sm btn-delete-project');
+    deleteEl.append(deleteBtnEl);
+    
+    // if(projectDate.isBefore(today)){
+    //     tableRowEl.addClass('project-late');
+    // } else if (projectDate.isSame(today)){
+    //     tableRowEl.addClass('project-today');
+    // }
+
+    tableRowEl.append(projectNameEl, projectTypeEl, dueDateEl, deleteEl);
+    projDisplayEl.append(tableRowEl);
+}
