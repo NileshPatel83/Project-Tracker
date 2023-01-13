@@ -1,4 +1,4 @@
-const keyText = 'project-tracker-';
+const keyText = 'project-tracker';
 
 let dateInputEl = $('#datepicker');
 let addProjectFormEl = $('#add-project-form')
@@ -16,23 +16,26 @@ let timeInterval = setInterval(function () {
 //Event handler when new project form is submitted.
 addProjectFormEl.on('submit', processProjectData);
 
+projDisplayEl.on('click', '.btn-delete-project', deleteProject());
+
+function deleteProject(event){
+
+}
+
 //Processes project data entered in modal form.
 function processProjectData (event){
 
     event.preventDefault();
     
     //Gets the project data.
-    let projectData = getNewProectData();
+    let projectData = getNewProjectData();
     if(projectData === null) return;
 
     //Removes current project data from browser.
-    removeProjectData();
-
-    //Get project data counter for local storage.
-    let storageCounter = getStorageCounter();
+    removeProjectDataDisplay();
 
     //Stores current project data to local storage.
-    storeCurrentProjectToLocalStorage(storageCounter, projectData);
+    storeCurrentProjectToLocalStorage(projectData);
 
     //Displays all project data in ascending order.
     displayAllProjectData();
@@ -54,20 +57,9 @@ function getAllProjectStorage(){
 
     let projectStorage = [];
 
-    //Gets all keys from local storage.
-    let keys = Object.keys(localStorage);
-    keys = keys.sort();
-
-    //Loops through all keys and gets the key pair.
-    for (let i = 0; i < keys.length; i++) {
-
-        //Only processes key if it includes the word 'quizscore-'.
-        if(keys[i].includes(keyText)) {
-
-            //Gets the key pair object and adds it to an array.
-            let storage = JSON.parse(localStorage.getItem(keys[i]));
-            if(storage !== null) projectStorage.push(storage);
-        }
+    let storage = localStorage.getItem(keyText);   
+    if(storage !== null){
+        projectStorage = JSON.parse(storage);
     }
 
     //Returns the storage.
@@ -96,64 +88,43 @@ function displayProjectData(projectData){
     deleteBtnEl.addClass('btn btn-sm btn-delete-project');
     deleteEl.append(deleteBtnEl);
     
-    // if(projectDate.isBefore(today)){
-    //     tableRowEl.addClass('project-late');
-    // } else if (projectDate.isSame(today)){
-    //     tableRowEl.addClass('project-today');
-    // }
+    if(projectDate.isBefore(today)){
+        tableRowEl.addClass('project-late');
+    } else if (projectDate.isSame(today)){
+        tableRowEl.addClass('project-today');
+    }
 
     tableRowEl.append(projectNameEl, projectTypeEl, dueDateEl, deleteEl);
     projDisplayEl.append(tableRowEl);
 }
 
 //Stores current project data to local storage.
-function storeCurrentProjectToLocalStorage(storageCounter, projectData){
+function storeCurrentProjectToLocalStorage(projectData){
 
-    //Creates key.
-    let key = keyText + storageCounter;
+    //Gets all project.
+    let projectStorage = getAllProjectStorage();
 
-    //Stores current project to local storage.
-    localStorage.setItem(key, JSON.stringify(projectData));
-}
+    //Adds current project to the array.
+    projectStorage.push(projectData);
 
-//Gets the storage counter for current project.
-//This is done by getting all keys for the projects, finding the last counter and incrementing it.
-function getStorageCounter(){
-
-    let counter = 0;
-
-    //Gets all keys from local storage.
-    let keys = Object.keys(localStorage);
-
-    //Loops through all keys and gets the key pair.
-    for (let i = 0; i < keys.length; i++){
-
-        //Only processes key if it includes the word 'quizscore-'.
-        //Compares the localstorage counter and stores the max value.
-        if(keys[i].includes(keyText)){
-            let number = parseInt(keys[i].replace(keyText, '', 10));
-
-            if(number > counter) counter = number;
-        }
-    }
-
-    return counter + 1;
+    //Stores all projects to local storage.
+    localStorage.setItem(keyText, JSON.stringify(projectStorage));
 }
 
 //Removes current project data from browser.
-function removeProjectData(){
+function removeProjectDataDisplay(){
     
-        //Gets all direct children elements of project display element.
-        let contentChildren = projDisplayEl.children();
+    //Gets all direct children elements of project display element.
+    let contentChildren = projDisplayEl.children();
 
-        //Loops through all children and removed them from content element and makes the page clear.
-       for (const child of contentChildren) {
+    //Loops through all children and removed them from content element and makes the page clear.
+    for (const child of contentChildren) {
         child.remove();
-       }
+    }
 }
 
 //Gets the project data from modal form.
-function getNewProectData(){
+function getNewProjectData(){
 
     //Returns null if any of project name, type or due date are not set.
     if (!projNameEl.val() || !projTypeEl.val() || !dateInputEl.val()) return null;
@@ -163,6 +134,10 @@ function getNewProectData(){
         projectType : projTypeEl.val(),
         dueDate : dateInputEl.val()
     };
+
+    projNameEl.val('');
+    projTypeEl.val('');
+    dateInputEl.val('');
 
     return projectData;
 }
