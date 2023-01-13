@@ -1,4 +1,4 @@
-const keyText = 'project-tracker';
+const keyText = 'project-tracker-';
 
 let dateInputEl = $('#datepicker');
 let addProjectFormEl = $('#add-project-form')
@@ -31,15 +31,82 @@ function processProjectData (event){
     //Stores current project data to local storage.
     storeCurrentProjectToLocalStorage(storageCounter, projectData);
 
-        // //Displays project data in table.
-    // displayProjectData(projectData);
+    //Displays all project data in ascending order.
+    displayAllProjectData();
+}
+
+//Displays all project data in ascending order.
+function displayAllProjectData(){
+
+    //Gets all local storage for projects.
+    let projectStorage = getAllProjectStorage();
+
+    //Displays all project data in table.
+    projectStorage.forEach(project => {
+        displayProjectData(project);
+    });
+}
+
+function getAllProjectStorage(){
+
+    let projectStorage = [];
+
+    //Gets all keys from local storage.
+    let keys = Object.keys(localStorage);
+
+    //Loops through all keys and gets the key pair.
+    for (let i = 0; i < keys.length; i++) {
+
+        //Only processes key if it includes the word 'quizscore-'.
+        if(keys[i].includes(keyText)) {
+
+            //Gets the key pair object and adds it to an array.
+            let storage = JSON.parse(localStorage.getItem(keys[i]));
+            if(storage !== null) projectStorage.push(storage);
+        }
+    }
+
+    //Returns the storage in ascending order by due date.
+    return projectStorage.sort(({dueDate:lowDate}, {dueDate:highDate}) => lowDate- highDate);
+}
+
+//Displays project data in table.
+function displayProjectData(projectData){
+
+    let projectDate = dayjs(projectData.dueDate);
+
+    let tableRowEl = $('<tr>');
+
+    let projectNameEl = $('<td>');
+    projectNameEl.text (projectData.projectName);
+
+    let projectTypeEl = $('<td>');
+    projectTypeEl.text (projectData.projectType);
+
+    let dueDateEl = $('<td>');
+    dueDateEl.text (projectDate.format('DD/MM/YYYY'));
+
+    let deleteEl = $('<td>');
+    let deleteBtnEl = $('<button>');
+    deleteBtnEl.text('X');
+    deleteBtnEl.addClass('btn btn-sm btn-delete-project');
+    deleteEl.append(deleteBtnEl);
+    
+    // if(projectDate.isBefore(today)){
+    //     tableRowEl.addClass('project-late');
+    // } else if (projectDate.isSame(today)){
+    //     tableRowEl.addClass('project-today');
+    // }
+
+    tableRowEl.append(projectNameEl, projectTypeEl, dueDateEl, deleteEl);
+    projDisplayEl.append(tableRowEl);
 }
 
 //Stores current project data to local storage.
 function storeCurrentProjectToLocalStorage(storageCounter, projectData){
 
     //Creates key.
-    let key = scoreKey + storageCounter;
+    let key = keyText + storageCounter;
 
     //Stores current project to local storage.
     localStorage.setItem(key, JSON.stringify(projectData));
@@ -82,36 +149,4 @@ function getNewProectData(){
     };
 
     return projectData;
-}
-
-//Displays project data in table.
-function displayProjectData(projectData){
-
-    let projectDate = dayjs(projectData.dueDate);
-
-    let tableRowEl = $('<tr>');
-
-    let projectNameEl = $('<td>');
-    projectNameEl.text (projectData.projectName);
-
-    let projectTypeEl = $('<td>');
-    projectTypeEl.text (projectData.projectType);
-
-    let dueDateEl = $('<td>');
-    dueDateEl.text (projectDate.format('DD/MM/YYYY'));
-
-    let deleteEl = $('<td>');
-    let deleteBtnEl = $('<button>');
-    deleteBtnEl.text('X');
-    deleteBtnEl.addClass('btn btn-sm btn-delete-project');
-    deleteEl.append(deleteBtnEl);
-    
-    // if(projectDate.isBefore(today)){
-    //     tableRowEl.addClass('project-late');
-    // } else if (projectDate.isSame(today)){
-    //     tableRowEl.addClass('project-today');
-    // }
-
-    tableRowEl.append(projectNameEl, projectTypeEl, dueDateEl, deleteEl);
-    projDisplayEl.append(tableRowEl);
 }
