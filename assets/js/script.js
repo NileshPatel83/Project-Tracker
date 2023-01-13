@@ -13,6 +13,9 @@ let timeInterval = setInterval(function () {
     $('#current-time').text(dayjs().format('h:mm:ss A'));
 }, 1000);  
 
+//Displays all project data in ascending order.
+displayAllProjectData();
+
 //Event handler when new project form is submitted.
 addProjectFormEl.on('submit', processProjectData);
 
@@ -20,6 +23,23 @@ projDisplayEl.on('click', '.btn-delete-project', deleteProject);
 
 function deleteProject(event){
     event.preventDefault();
+
+    let projectIndex = parseInt($(event.target).attr('data-index'));
+
+    //Gets all local storage for projects.
+    let projectStorage = getAllProjectStorage();
+
+    //Removes selected project from the list.
+    projectStorage.splice(projectIndex, 1);
+
+    //Removes current project data from browser.
+    removeProjectDataDisplay();
+
+    //Stores current project data to local storage.
+    storeProjectsToLocalStorage(projectStorage);
+
+    //Displays all project data in ascending order.
+    displayAllProjectData();
 }
 
 //Processes project data entered in modal form.
@@ -31,11 +51,17 @@ function processProjectData (event){
     let projectData = getNewProjectData();
     if(projectData === null) return;
 
+    //Gets all project.
+    let projectStorage = getAllProjectStorage();
+
+    //Adds current project to the array.
+    projectStorage.push(projectData);
+
     //Removes current project data from browser.
     removeProjectDataDisplay();
 
     //Stores current project data to local storage.
-    storeCurrentProjectToLocalStorage(projectData);
+    storeProjectsToLocalStorage(projectStorage);
 
     //Displays all project data in ascending order.
     displayAllProjectData();
@@ -98,13 +124,7 @@ function displayProjectData(projectData, index){
 }
 
 //Stores current project data to local storage.
-function storeCurrentProjectToLocalStorage(projectData){
-
-    //Gets all project.
-    let projectStorage = getAllProjectStorage();
-
-    //Adds current project to the array.
-    projectStorage.push(projectData);
+function storeProjectsToLocalStorage(projectStorage){
 
     //Stores all projects to local storage.
     localStorage.setItem(keyText, JSON.stringify(projectStorage));
