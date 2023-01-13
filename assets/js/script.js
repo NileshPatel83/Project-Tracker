@@ -25,6 +25,9 @@ function processProjectData (event){
     let projectData = getNewProectData();
     if(projectData === null) return;
 
+    //Removes current project data from browser.
+    removeProjectData();
+
     //Get project data counter for local storage.
     let storageCounter = getStorageCounter();
 
@@ -53,6 +56,7 @@ function getAllProjectStorage(){
 
     //Gets all keys from local storage.
     let keys = Object.keys(localStorage);
+    keys = keys.sort();
 
     //Loops through all keys and gets the key pair.
     for (let i = 0; i < keys.length; i++) {
@@ -66,8 +70,8 @@ function getAllProjectStorage(){
         }
     }
 
-    //Returns the storage in ascending order by due date.
-    return projectStorage.sort(({dueDate:lowDate}, {dueDate:highDate}) => lowDate- highDate);
+    //Returns the storage.
+    return projectStorage;
 }
 
 //Displays project data in table.
@@ -134,6 +138,18 @@ function getStorageCounter(){
     }
 
     return counter + 1;
+}
+
+//Removes current project data from browser.
+function removeProjectData(){
+    
+        //Gets all direct children elements of project display element.
+        let contentChildren = projDisplayEl.children();
+
+        //Loops through all children and removed them from content element and makes the page clear.
+       for (const child of contentChildren) {
+        child.remove();
+       }
 }
 
 //Gets the project data from modal form.
