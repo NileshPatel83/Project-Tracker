@@ -1,11 +1,20 @@
-let addButtonEl = $('#add-button');
-let containerEl = $('#container');
+let dateInputEl = $('#datepicker');
+let addProjectEl = $('#add-project');
+let projDisplayEl = $('#project-display');
 
 // function displayProjectForm(){
 
 // }
 
 // addButtonEl.on('submit', displayProjectForm());
+
+// Datepicker widget
+$(function () {
+    $('#datepicker').datepicker({
+      changeMonth: true,
+      changeYear: true,
+    });
+  });
 
 var today = dayjs();
 $('#current-day').text(today.format('MMM D, YYYY'));
